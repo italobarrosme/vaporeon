@@ -4,195 +4,215 @@
   </a>
 </p>
 
-<h3 align="center">Jolteon — Next.js 15 + Auth0 + Prisma + 3D (R3F)</h3>
+<h3 align="center">Vaporeon — Jogo da Velha 3D</h3>
+
+<p align="center">
+  Um jogo da velha interativo em 3D construído com Next.js 15, Three.js, React Three Fiber e Zustand para persistência local.
+</p>
+
+---
 
 ## 📝 Sumário
 
 - [📝 Sumário](#-sumário)
-- [📦 Tecnologias ](#-tecnologias-)
-- [🚀 Começando ](#-começando-)
+- [🎮 Sobre o Jogo](#-sobre-o-jogo)
+- [📦 Tecnologias](#-tecnologias)
+- [🚀 Como Executar](#-como-executar)
   - [Pré-requisitos](#pré-requisitos)
-  - [Ambiente local](#ambiente-local)
+  - [Instalação](#instalação)
+  - [Desenvolvimento](#desenvolvimento)
   - [Usando Docker](#usando-docker)
-  - [Scripts NPM](#scripts-npm)
-- [🗄️ Banco de Dados (Prisma)](#️-banco-de-dados-prisma)
-- [🔐 Autenticação (Auth0)](#-autenticação-auth0)
-- [🧰 Qualidade de Código e Hooks (Lefthook)](#-qualidade-de-código-e-hooks-lefthook)
-- [🧩 Estrutura resumida ](#-estrutura-resumida-)
+- [🎯 Como Jogar](#-como-jogar)
+  - [Controles:](#controles)
+  - [Componentes Principais:](#componentes-principais)
+- [📖 English Version](#-english-version)
+  - [🎮 About the Game](#-about-the-game)
+  - [📦 Technologies](#-technologies)
+  - [🚀 How to Run](#-how-to-run)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+    - [Development](#development)
+    - [Using Docker](#using-docker)
+  - [🎯 How to Play](#-how-to-play)
+    - [Controls:](#controls)
+    - [Main Components:](#main-components)
 
-## 📦 Tecnologias <a name="tecnologias"></a>
+## 🎮 Sobre o Jogo
+
+Este é um jogo da velha (tic-tac-toe) em 3D interativo onde você pode clicar nos blocos para fazer suas jogadas. O jogo apresenta:
+
+- **Interface 3D imersiva** criada com Three.js e React Three Fiber
+- **Física realística** com Rapier Physics
+- **Estado persistente** usando Zustand para gerenciamento local
+- **Detecção automática** de vitória e empate
+- **Animações suaves** e feedback visual
+- **Design responsivo** otimizado para web
+
+## 📦 Tecnologias
 
 - **Framework**: Next.js 15.5.2 (App Router) • React 19
-- **Linguagem**: TypeScript 5.8.3
-- **3D**: three 0.180 • @react-three/fiber 9.3 • drei 10.7 • postprocessing 3.0
-- **Estado e Forms**: Zustand 5 • React Hook Form 7.57 • Zod 3.25
-- **Estilos**: Tailwind CSS 4.1 • class-variance-authority • tailwind-merge
-- **HTTP**: ky
-- **Autenticação**: @auth0/nextjs-auth0 4.6
-- **PWA**: next-pwa (service worker, register e skipWaiting)
-- **Testes**: Vitest 3.2 • Testing Library • Jest DOM
-- **Qualidade**: ESLint 9.28 • Prettier 3.5 • Commitlint • Lefthook
+- **3D Engine**: Three.js 0.179 • React Three Fiber 9.3 • Drei 10.7
+- **Física**: @react-three/rapier 2.1
+- **Estado**: Zustand 5.0 para persistência local
+- **Linguagem**: TypeScript 5.8
+- **Estilização**: Tailwind CSS 4.1
+- **Testes**: Vitest 3.2 • Testing Library
+- **Qualidade**: ESLint 9.28 • Prettier 3.5
 
-## 🚀 Começando <a name="começando"></a>
+## 🚀 Como Executar
 
 ### Pré-requisitos
 
 - Node.js 20+
-- PostgreSQL (local ou via Docker)
-- Conta no Auth0 (aplicação regular web)
+- npm ou yarn
 
-Crie um `.env` na raiz. Exemplo para desenvolvimento local (dev em `http://localhost:3002`):
-
-```env
-# Auth0
-AUTH0_SECRET=""
-AUTH0_DOMAIN=""
-AUTH0_CLIENT_ID=""
-AUTH0_CLIENT_SECRET=""
-APP_BASE_URL="http://localhost:3002"
-# Opcional (APIs protegidas)
-AUTH0_SCOPE=""
-AUTH0_AUDIENCE=""
-
-# Postgres (local)
-POSTGRES_DB="app_db"
-POSTGRES_USER="postgres"
-POSTGRES_PASSWORD="postgres"
-
-# Prisma
-DATABASE_URL="postgresql://POSTGRES_USER:POSTGRES_PASSWORD@localhost:5432/POSTGRES_DB"
-```
-
-Se for usar Docker (app em `http://localhost:3000`), ajuste:
-
-```env
-APP_BASE_URL="http://localhost:3000"
-DATABASE_URL="postgresql://POSTGRES_USER:POSTGRES_PASSWORD@postgres:5432/POSTGRES_DB"
-```
-
-### Ambiente local
+### Instalação
 
 ```bash
-# instalar dependências
+# Clone o repositório
+git clone <url-do-repositorio>
+cd vaporeon
+
+# Instale as dependências
 npm install
+```
 
-# gerar cliente do prisma e aplicar migrações
-npx prisma generate
-npx prisma migrate dev
+### Desenvolvimento
 
-# (opcional) popular base
-npx prisma db seed
-
-# subir o servidor de desenvolvimento (porta 3002)
+```bash
+# Execute o servidor de desenvolvimento
 npm run dev
+
+# O jogo estará disponível em http://localhost:3002
 ```
 
 ### Usando Docker
 
 ```bash
-# subir containers (postgres + app)
+# Suba os containers
 npm run docker-up
-# ou
-docker-compose up -d
 
-# parar
+# O jogo estará disponível em http://localhost:3000
+
+# Para parar
 npm run docker-down
-# ou
-docker-compose down
 ```
 
-- Postgres expõe `5432:5432` com volume `postgres-data`.
-- App roda em produção dentro do container na porta 3000 (`npm start`).
+## 🎯 Como Jogar
 
-### Scripts NPM
+1. **Acesse** a página do jogo em `/games`
+2. **Clique** nos blocos 3D para fazer sua jogada
+3. **Alterne** entre X e O automaticamente
+4. **Vença** alinhando 3 símbolos (horizontal, vertical ou diagonal)
+5. **Reinicie** o jogo a qualquer momento
+
+### Controles:
+
+- **Mouse**: Clique nos blocos para jogar
+- **Arrastar**: Rotacione a câmera ao redor da cena
+- **Scroll**: Zoom in/out na cena
+
+### Componentes Principais:
+
+- **`useTicTacToe`**: Hook principal com lógica do jogo e estado
+- **`Scene`**: Cena 3D que renderiza o tabuleiro e gerencia física
+- **`Block`**: Componente 3D de cada célula do tabuleiro
+- **`X`** e **`O`**: Componentes 3D dos símbolos dos jogadores
+
+---
+
+## 📖 English Version
+
+<h3 align="center">Vaporeon — 3D Tic-Tac-Toe Game</h3>
+
+<p align="center">
+  An interactive 3D tic-tac-toe game built with Next.js 15, Three.js, React Three Fiber, and Zustand for local persistence.
+</p>
+
+### 🎮 About the Game
+
+This is an interactive 3D tic-tac-toe game where you can click on blocks to make your moves. The game features:
+
+- **Immersive 3D interface** created with Three.js and React Three Fiber
+- **Realistic physics** with Rapier Physics
+- **Persistent state** using Zustand for local management
+- **Automatic detection** of wins and draws
+- **Smooth animations** and visual feedback
+- **Responsive design** optimized for web
+
+### 📦 Technologies
+
+- **Framework**: Next.js 15.5.2 (App Router) • React 19
+- **3D Engine**: Three.js 0.179 • React Three Fiber 9.3 • Drei 10.7
+- **Physics**: @react-three/rapier 2.1
+- **State**: Zustand 5.0 for local persistence
+- **Language**: TypeScript 5.8
+- **Styling**: Tailwind CSS 4.1
+- **Testing**: Vitest 3.2 • Testing Library
+- **Quality**: ESLint 9.28 • Prettier 3.5
+
+### 🚀 How to Run
+
+#### Prerequisites
+
+- Node.js 20+
+- npm or yarn
+
+#### Installation
 
 ```bash
-npm run dev            # next dev --turbo --port 3002
-npm run build          # next build
-npm start              # next start (produção, porta 3000 por padrão)
-npm test               # vitest
-npm run test:coverage  # vitest run --coverage
-npm run test:deploy    # vitest --run
-npm run test:snapshot  # vitest -u
-npm run docker-up      # docker-compose up -d
-npm run docker-down    # docker-compose down
+# Clone the repository
+git clone <repository-url>
+cd vaporeon
+
+# Install dependencies
+npm install
 ```
 
-## 🗄️ Banco de Dados (Prisma)
-
-- Schema: `prisma/schema.prisma` (modelo `Lead`)
-- Comandos úteis:
+#### Development
 
 ```bash
-npx prisma generate
-npx prisma migrate dev --name <nome_da_migracao>
-npx prisma migrate reset
-npx prisma studio
-npx prisma db seed
+# Run development server
+npm run dev
+
+# Game will be available at http://localhost:3002
 ```
 
-- Seed configurado em `package.json`:
-  - `"prisma": { "seed": "node --loader ts-node/esm prisma/lib/seed.ts" }`
-
-## 🔐 Autenticação (Auth0)
-
-- SDK: `@auth0/nextjs-auth0` (config em `auth0/lib/auth0.ts`)
-- Variáveis obrigatórias: `AUTH0_SECRET`, `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`, `APP_BASE_URL`
-- Variáveis opcionais (APIs): `AUTH0_SCOPE`, `AUTH0_AUDIENCE`
-- URLs no painel do Auth0 (ajuste conforme `APP_BASE_URL`):
-  - Allowed Callback URLs: `http://localhost:3002/api/auth/callback`, `http://localhost:3000/api/auth/callback`
-  - Allowed Logout URLs: `http://localhost:3002/`, `http://localhost:3000/`
-- Rotas padrão do SDK:
-  - `/api/auth/login`, `/api/auth/callback`, `/api/auth/logout`
-
-## 🧰 Qualidade de Código e Hooks (Lefthook)
-
-Configuração real (`lefthook.yml`):
-
-```yaml
-pre-push:
-  parallel: true
-  commands:
-    packages-audit:
-      run: npm run build
-
-pre-commit:
-  parallel: true
-  commands:
-    linter:
-      glob: 'src/*.{js,ts,jsx,tsx}'
-      run: npx eslint {staged_files}
-    prettier:
-      glob: '*.{js,ts,jsx,tsx,css,scss,json,md}'
-      run: npx prettier --write {staged_files}
-    tests:
-      glob: '*.{js,ts,jsx,tsx}'
-      run: npm run test:deploy --findRelatedTests --bail
-```
-
-Uso:
+#### Using Docker
 
 ```bash
-npx lefthook install
-lefthook run pre-commit
-lefthook run pre-push
+# Start containers
+npm run docker-up
+
+# Game will be available at http://localhost:3000
+
+# To stop
+npm run docker-down
 ```
 
-Commits seguem Conventional Commits; mensagens em inglês (ex.: `feat: add 3d scene base`).
+### 🎯 How to Play
 
-## 🧩 Estrutura resumida <a name="estrutura-resumida"></a>
+1. **Access** the game page at `/games`
+2. **Click** on 3D blocks to make your move
+3. **Alternate** between X and O automatically
+4. **Win** by aligning 3 symbols (horizontal, vertical, or diagonal)
+5. **Restart** the game anytime
 
-- `src/app`: App Router (`layout.tsx`, `page.tsx`, PWA metadata)
-- `src/modules/3d`: Canvas, Scene e peças 3D (three + R3F + drei)
-- `src/app/auth`: componentes de autenticação (ex.: Navbar, Logout)
-- `src/app/common`: hooks e HTTP com `ky`
-- `prisma`: `schema.prisma`, seeds e migrações
-- `auth0/lib/auth0.ts`: cliente Auth0
-- `next.config.mjs`: PWA habilitado e `images.remotePatterns`
-- `vitest.config.mts`: JSDOM, cobertura via istanbul
+#### Controls:
 
-Dicas:
+- **Mouse**: Click blocks to play
+- **Drag**: Rotate camera around the scene
+- **Scroll**: Zoom in/out of the scene
 
-- Dev: app em `http://localhost:3002`
-- Docker (prod): app em `http://localhost:3000`
-- Imagens remotas permitidas: `lh3.googleusercontent.com`, `images.unsplash.com`
+#### Main Components:
+
+- **`useTicTacToe`**: Main hook with game logic and state
+- **`Scene`**: 3D scene that renders the board and manages physics
+- **`Block`**: 3D component for each board cell
+- **`X`** and **`O`**: 3D components for player symbols
+
+---
+
+<p align="center">
+  Made with ❤️ using Next.js, Three.js, and React Three Fiber
+</p>
