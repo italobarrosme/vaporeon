@@ -9,8 +9,8 @@ type Props = {
 }
 
 export const metadata: Metadata = {
-  title: 'Nezuko 3',
-  description: 'Nezuko 3',
+  title: 'Vaporeon',
+  description: 'Vaporeon',
   manifest: '/manifest.json',
   icons: {
     apple: '/apple-icon.png',
