@@ -1,1 +1,1 @@
-export * from './useTictactoe'
+export * from './useTicTacToe'
