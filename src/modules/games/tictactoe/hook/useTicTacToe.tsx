@@ -34,6 +34,7 @@ export const useTicTacToe = () => {
   const [gameState, setGameState] = useState<GameState>('playing')
   const [winner, setWinner] = useState<Player | null>(null)
   const [winningLine, setWinningLine] = useState<number[] | null>(null)
+  const [players, setPlayers] = useState({ x: 'Jogador 1', o: 'Jogador 2' })
 
   // Verifica se há vencedor
   const checkWinner = useCallback(
@@ -110,10 +111,12 @@ export const useTicTacToe = () => {
     winner,
     winningLine,
     blocksPositions,
+    players,
 
     // Ações
     handleBlockClick,
     resetGame,
+    setPlayers,
 
     // Utilitários
     isGameOver: gameState !== 'playing',

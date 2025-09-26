@@ -8,15 +8,18 @@ import { Block } from '@/modules/games/tictactoe/3d/Block'
 import { Mesh } from 'three'
 import { Floor } from '../pieces/Floor'
 import { useTicTacToe } from '@/modules/games/tictactoe/hook/useTicTacToe'
-// import { useRainObjects } from '../animations/hooks/useRainObjects'
 
-// import { objectsDataMock } from '@/modules/games/mockItems'
+type SceneProps = {
+  handleBlockClick: ReturnType<typeof useTicTacToe>['handleBlockClick']
+  board: ReturnType<typeof useTicTacToe>['board']
+  blocksPositions: ReturnType<typeof useTicTacToe>['blocksPositions']
+}
 
-// 3x3 tic toc toe
-
-export const Scene = () => {
-  const { blocksPositions, board, handleBlockClick } = useTicTacToe()
-
+export const Scene = ({
+  handleBlockClick,
+  board,
+  blocksPositions,
+}: SceneProps) => {
   const floorRef = useRef<Mesh>(null)
   const blocksRefs = useRef<Array<React.RefObject<Mesh | null>>>(
     // Inicializar array de refs
