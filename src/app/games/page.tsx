@@ -1,6 +1,5 @@
 'use client'
 import dynamic from 'next/dynamic'
-import { useRainBoxsGames } from '@/modules/games/hooks/useRainBoxsGames'
 
 const Scene = dynamic(() => import('@/modules/3d/Scene'), {
   ssr: false,
@@ -11,11 +10,9 @@ const RenderCanvas = dynamic(() => import('@/modules/3d/RenderCanvas'), {
 })
 
 export default function Game() {
-  const gameData = useRainBoxsGames()
-
   return (
     <RenderCanvas>
-      <Scene gameData={gameData} />
+      <Scene />
     </RenderCanvas>
   )
 }

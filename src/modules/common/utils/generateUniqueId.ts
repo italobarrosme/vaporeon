@@ -20,6 +20,6 @@ export function generateUniqueId(prefix?: string): string {
  * @param index - Índice do game na lista
  * @returns ID único para o game
  */
-export function generateGameId(gameId: number, index: number): string {
+export function generateId(gameId: number, index: number): string {
   return generateUniqueId(`game-${gameId}-${index}`)
 }

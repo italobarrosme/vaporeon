@@ -2,21 +2,24 @@
 
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
+// import { EffectOutline } from '../animations/components'
+// import * as THREE from 'three'
+// import { CameraLogger } from '../utils/CameraLogger'
 
 type RenderCanvasProps = {
   children: React.ReactNode
 }
 
 export const RenderCanvas = ({ children }: RenderCanvasProps) => {
-  const initialPosition: [number, number, number] = [-9, 22, 40]
-  const initialLookAt: [number, number, number] = [-3, 15, 10]
+  const initialPosition: [number, number, number] = [-12.52, 28.37, 21.75]
+  const initialLookAt: [number, number, number] = [-0.015, -0.023, 0.056]
+  const positionLight: [number, number, number] = [-5, 9, 10]
   return (
     <Canvas
       shadows
       className="w-screen h-screen"
-      flat
       dpr={[1, 1.5]} // Reduzir DPR para economizar memória
-      gl={{ antialias: false }}
+      gl={{ antialias: true }}
       camera={{
         position: initialPosition,
         fov: 70,
@@ -25,8 +28,23 @@ export const RenderCanvas = ({ children }: RenderCanvasProps) => {
       }}
     >
       <color attach="background" args={['#5f27cd']} />
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[10, 10, 5]} intensity={1.5} />
+      <mesh position={positionLight}>
+        <pointLight
+          position={positionLight}
+          intensity={1000}
+          castShadow
+          color="#F5F7FA"
+          shadow-mapSize={[2048, 2048]}
+        />
+      </mesh>
+      {/* <EffectOutline
+        initialPosition={initialPosition}
+        disablePointerAnimation={false}
+        currentBasePosition={new THREE.Vector3(...initialPosition)}
+        persistedLookAt={new THREE.Vector3(...initialLookAt)}
+      >
+        {children}
+      </EffectOutline> */}
       {children}
       <OrbitControls
         position0={initialPosition}
@@ -37,6 +55,7 @@ export const RenderCanvas = ({ children }: RenderCanvasProps) => {
         // enableRotate={false}
         // enablePan={false}
       />
+      {/* <CameraLogger /> */}
     </Canvas>
   )
 }

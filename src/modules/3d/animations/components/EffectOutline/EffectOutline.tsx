@@ -87,7 +87,7 @@ export function EffectOutline({
         multisampling={4}
       >
         <Outline
-          visibleEdgeColor={0xffffff}
+          visibleEdgeColor={0xf67}
           hiddenEdgeColor={0x000000}
           blur
           width={size.width * 0.5} // cuidado com width exagerado!
