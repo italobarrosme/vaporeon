@@ -1,50 +1,80 @@
-import { useState } from 'react'
+'use client'
 
-type Props = {
-  onStart: (players: { p1: string; p2: string }) => void
-}
+import { useCallback, useEffect } from 'react'
+import { usePlayerStore } from '@/stores/playerStore'
+import { START_SCREEN_TEXTS } from './constants'
+import { useGameStore } from '@/stores/gameStore'
 
-export default function StartScreen({ onStart }: Props) {
-  const [player1, setPlayer1] = useState('')
-  const [player2, setPlayer2] = useState('')
+export const StartScreen = () => {
+  const { players, setPlayer, reset } = usePlayerStore()
+  const startGame = useGameStore((state) => state.startGame)
 
-  const handleStart = () => {
-    if (!player1.trim() || !player2.trim()) return
-    onStart({ p1: player1, p2: player2 })
-  }
+  useEffect(() => {
+    reset()
+  }, [reset])
+
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault()
+      if (!players.player1 || !players.player2) return
+      startGame()
+    },
+    [players, startGame]
+  )
+
+  const handleChange = useCallback(
+    (player: 'player1' | 'player2', value: string) => {
+      setPlayer(player, value)
+    },
+    [setPlayer]
+  )
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#0a003d] text-white font-['Press_Start_2P']">
-      <div className="text-center space-y-6">
-        <h1 className="text-3xl text-yellow-400 drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">
-          INÍCIO DO JOGO
+    <div className="flex items-center justify-center min-h-screen bg-game-bg text-white font-press-start">
+      <form onSubmit={handleSubmit} className="text-center space-y-6">
+        <h1 className="text-3xl text-yellow-400 text-shadow-game">
+          {START_SCREEN_TEXTS.title}
         </h1>
 
         <div className="space-y-4">
-          <input
-            type="text"
-            placeholder="JOGADOR 1"
-            value={player1}
-            onChange={(e) => setPlayer1(e.target.value)}
-            className="w-64 p-3 bg-[#1a006d] border-4 border-yellow-500 text-white text-sm tracking-wider focus:outline-none"
-          />
-          <input
-            type="text"
-            placeholder="JOGADOR 2"
-            value={player2}
-            onChange={(e) => setPlayer2(e.target.value)}
-            className="w-64 p-3 bg-[#1a006d] border-4 border-yellow-500 text-white text-sm tracking-wider focus:outline-none"
-          />
+          <div>
+            <label htmlFor="player1" className="sr-only">
+              {START_SCREEN_TEXTS.player1Placeholder}
+            </label>
+            <input
+              id="player1"
+              type="text"
+              required
+              placeholder={START_SCREEN_TEXTS.player1Placeholder}
+              value={players.player1}
+              onChange={(e) => handleChange('player1', e.target.value)}
+              className="w-64 p-3 bg-game-input-bg border-4 border-yellow-500 text-white text-sm tracking-wider focus:outline-none"
+            />
+          </div>
+          <div>
+            <label htmlFor="player2" className="sr-only">
+              {START_SCREEN_TEXTS.player2Placeholder}
+            </label>
+            <input
+              id="player2"
+              type="text"
+              required
+              placeholder={START_SCREEN_TEXTS.player2Placeholder}
+              value={players.player2}
+              onChange={(e) => handleChange('player2', e.target.value)}
+              className="w-64 p-3 bg-game-input-bg border-4 border-yellow-500 text-white text-sm tracking-wider focus:outline-none"
+            />
+          </div>
         </div>
 
         <button
-          onClick={handleStart}
-          disabled={!player1.trim() || !player2.trim()}
+          type="submit"
+          disabled={!players.player1 || !players.player2}
           className="w-64 py-3 bg-red-600 border-4 border-yellow-500 text-yellow-200 text-sm tracking-wider hover:bg-red-700 transition disabled:opacity-50"
         >
-          INICIAR JOGO
+          {START_SCREEN_TEXTS.startButton}
         </button>
-      </div>
+      </form>
     </div>
   )
 }

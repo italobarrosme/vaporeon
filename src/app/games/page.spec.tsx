@@ -1,21 +1,12 @@
-import { render, screen, fireEvent } from '@testing-library/react'
-import { describe, it, expect, vi } from 'vitest'
-import '@testing-library/jest-dom' // Import jest-dom for toBeInTheDocument
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import '@testing-library/jest-dom'
 import Game from './page'
+import { useGameStore } from '@/stores/gameStore'
+import { usePlayerStore } from '@/stores/playerStore'
+import { START_SCREEN_TEXTS } from '@/modules/games/tictactoe/components/StartScreen/constants'
 
-// Mock child components
-vi.mock('@/modules/games/tictactoe/components/StartScreen', () => ({
-  StartScreen: ({
-    onStart,
-  }: {
-    onStart: (players: { p1: string; p2: string }) => void
-  }) => (
-    <button onClick={() => onStart({ p1: 'Player 1', p2: 'Player 2' })}>
-      Start Game
-    </button>
-  ),
-}))
-
+// Mocks para os componentes filhos
 vi.mock('@/modules/games/tictactoe/components/GameInfoPanel', () => ({
   GameInfoPanel: () => <div>Game Info Panel</div>,
 }))
@@ -32,36 +23,57 @@ vi.mock('@/modules/3d/Scene', () => ({
   default: () => <div>Scene</div>,
 }))
 
-// Mock the hook
-vi.mock('@/modules/games/tictactoe/hook/useTicTacToe', () => ({
-  useTicTacToe: () => ({
-    gameState: 'playing',
-    currentPlayer: 'x',
-    winner: null,
-    isDraw: false,
-    resetGame: vi.fn(),
-    handleBlockClick: vi.fn(),
-    board: Array(9).fill('normal'),
-    blocksPositions: [],
-    players: { x: 'Player 1', o: 'Player 2' },
-    setPlayers: vi.fn(),
-  }),
-}))
+// Estado inicial dos stores
+const initialGameStoreState = useGameStore.getState()
+const initialPlayerStoreState = usePlayerStore.getState()
 
 describe('Game page', () => {
+  beforeEach(() => {
+    // Reseta os stores para o estado inicial antes de cada teste
+    useGameStore.setState(initialGameStoreState)
+    usePlayerStore.setState(initialPlayerStoreState)
+  })
+
   it('should render the StartScreen initially', () => {
     render(<Game />)
-    expect(screen.getByText('Start Game')).toBeInTheDocument()
+    expect(
+      screen.getByPlaceholderText(START_SCREEN_TEXTS.player1Placeholder)
+    ).toBeInTheDocument()
+    expect(
+      screen.getByPlaceholderText(START_SCREEN_TEXTS.player2Placeholder)
+    ).toBeInTheDocument()
+    expect(screen.getByText(START_SCREEN_TEXTS.startButton)).toBeInTheDocument()
   })
 
   it('should render the game view after starting the game', async () => {
     render(<Game />)
 
-    // Start the game
-    fireEvent.click(screen.getByText('Start Game'))
+    // Simula o preenchimento dos nomes dos jogadores
+    fireEvent.change(
+      screen.getByPlaceholderText(START_SCREEN_TEXTS.player1Placeholder),
+      {
+        target: { value: 'Player 1' },
+      }
+    )
+    fireEvent.change(
+      screen.getByPlaceholderText(START_SCREEN_TEXTS.player2Placeholder),
+      {
+        target: { value: 'Player 2' },
+      }
+    )
 
-    // Check if the game view is rendered
-    expect(await screen.findByText('Game Info Panel')).toBeInTheDocument()
-    expect(await screen.findByText('Scene')).toBeInTheDocument()
+    // Clica no botão para iniciar o jogo
+    fireEvent.click(screen.getByText(START_SCREEN_TEXTS.startButton))
+
+    // Aguarda a renderização da visão do jogo
+    await waitFor(() => {
+      expect(
+        screen.queryByText(START_SCREEN_TEXTS.startButton)
+      ).not.toBeInTheDocument()
+    })
+
+    // Verifica se a visão do jogo foi renderizada
+    expect(screen.getByText('Game Info Panel')).toBeInTheDocument()
+    expect(screen.getByText('Scene')).toBeInTheDocument()
   })
 })

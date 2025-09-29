@@ -1,5 +1,3 @@
-'use client'
-
 import { Physics } from '@react-three/rapier'
 import { createRef, Fragment, useRef } from 'react'
 
@@ -8,11 +6,12 @@ import { Block } from '@/modules/games/tictactoe/3d/Block'
 import { Mesh } from 'three'
 import { Floor } from '../pieces/Floor'
 import { useTicTacToe } from '@/modules/games/tictactoe/hook/useTicTacToe'
+import { blocksPositions } from '@/stores/ticTacToeStore'
 
 type SceneProps = {
   handleBlockClick: ReturnType<typeof useTicTacToe>['handleBlockClick']
   board: ReturnType<typeof useTicTacToe>['board']
-  blocksPositions: ReturnType<typeof useTicTacToe>['blocksPositions']
+  blocksPositions: typeof blocksPositions
 }
 
 export const Scene = ({
