@@ -7,12 +7,12 @@ import { Mesh } from 'three'
 import { Floor } from '../pieces/Floor'
 import { useTicTacToe } from '@/modules/games/tictactoe/hook'
 
-export const Scene = () => {
-  const { blocksPositions, board, handleBlockClick } = useTicTacToe()
+// 1. Definir as props da cena com base no que é retornado pelo hook useTicTacToe
+type SceneProps = ReturnType<typeof useTicTacToe>
 
+export const Scene = ({ board, blocksPositions, handleBlockClick }: SceneProps) => {
   const floorRef = useRef<Mesh>(null)
   const blocksRefs = useRef<Array<React.RefObject<Mesh | null>>>(
-    // Inicializar array de refs
     Array.from({ length: blocksPositions.length }, () => createRef<Mesh>())
   )
 

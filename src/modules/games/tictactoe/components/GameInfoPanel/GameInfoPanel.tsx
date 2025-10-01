@@ -1,22 +1,40 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { GAME_INFO_PANEL_TEXTS } from './constants'
 import { GAME_STATE } from '../../constants/game'
-import { useTicTacToe } from '../../hook'
 import { usePlayerStore } from '../../store'
 import { redirect } from 'next/navigation'
+import { useTicTacToe } from '../../hook'
 
-export const GameInfoPanel = () => {
-  const { gameState, currentPlayer, winner, isDraw, resetGame } = useTicTacToe()
+// Tipagem D.R.Y: Os tipos são derivados diretamente do hook.
+type GameState = ReturnType<typeof useTicTacToe>
+type GameInfoPanelProps = Pick<
+  GameState,
+  'gameState' | 'currentPlayer' | 'winner' | 'isDraw' | 'resetGame'
+>
+
+export const GameInfoPanel = ({
+  gameState,
+  currentPlayer,
+  winner,
+  isDraw,
+  resetGame,
+}: GameInfoPanelProps) => {
   const { players, resetPlayers } = usePlayerStore()
+  const [isClient, setIsClient] = useState(false)
 
-  const onRestGame = () => {
-    // TODO: IMPLEMENTAR RESTART ROUND
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  // Ação para reiniciar apenas a rodada
+  const onResetGame = () => {
     resetGame()
   }
 
+  // Ação para reiniciar o jogo e os jogadores
   const onResetPlayers = () => {
-    // TODO: IMPLEMENTAR RESET PLAYERS
     resetPlayers()
     resetGame()
     redirect('/')
@@ -26,55 +44,40 @@ export const GameInfoPanel = () => {
     <div className="absolute top-4 left-4 bg-white p-4 rounded-lg shadow-lg text-gray-800 z-10">
       <h2 className="text-xl font-bold mb-2">{GAME_INFO_PANEL_TEXTS.title}</h2>
       <div className="text-lg">
-        {gameState === GAME_STATE.PLAYING && (
+        {isClient && gameState === GAME_STATE.PLAYING && (
           <p>{`${GAME_INFO_PANEL_TEXTS.turn} ${players[currentPlayer]}`}</p>
         )}
-        {gameState === GAME_STATE.WON && winner && (
+        {isClient && gameState === GAME_STATE.WON && winner && (
           <p>{`${players[winner]} ${GAME_INFO_PANEL_TEXTS.winner}`}</p>
         )}
         {isDraw && <p>{GAME_INFO_PANEL_TEXTS.draw}</p>}
       </div>
-      <div>{GameInfoPanelController({ onRestGame, onResetPlayers })}</div>
+
+      <div className="mt-4">
+        {gameState === GAME_STATE.WON || isDraw ? (
+          <>
+            <button
+              onClick={onResetGame}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              {GAME_INFO_PANEL_TEXTS.restartRound}
+            </button>
+            <button
+              onClick={onResetPlayers}
+              className="ml-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+            >
+              {GAME_INFO_PANEL_TEXTS.restartPlayers}
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={onResetPlayers}
+            className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+          >
+            {GAME_INFO_PANEL_TEXTS.restartPlayers}
+          </button>
+        )}
+      </div>
     </div>
-  )
-}
-
-type GameInfoPanelControllerProps = {
-  onRestGame: () => void
-  onResetPlayers: () => void
-}
-
-const GameInfoPanelController = ({
-  onRestGame,
-  onResetPlayers,
-}: GameInfoPanelControllerProps) => {
-  const { gameState, isDraw } = useTicTacToe()
-
-  if (gameState === GAME_STATE.WON || isDraw) {
-    return (
-      <>
-        <button
-          onClick={onRestGame}
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          {GAME_INFO_PANEL_TEXTS.restartRound}
-        </button>
-        <button
-          onClick={onResetPlayers}
-          className="mt-4 ml-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-        >
-          {GAME_INFO_PANEL_TEXTS.restartPlayers}
-        </button>
-      </>
-    )
-  }
-
-  return (
-    <button
-      onClick={onResetPlayers}
-      className="mt-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-    >
-      {GAME_INFO_PANEL_TEXTS.restartPlayers}
-    </button>
   )
 }
