@@ -1,20 +1,25 @@
+'use client'
+
 import { GAME_INFO_PANEL_TEXTS } from './constants'
 import { GAME_STATE } from '../../constants/game'
 import { useTicTacToe } from '../../hook'
 import { usePlayerStore } from '../../store'
+import { redirect } from 'next/navigation'
 
 export const GameInfoPanel = () => {
-  const { gameState, currentPlayer, winner, isDraw } = useTicTacToe()
-  const { players } = usePlayerStore()
+  const { gameState, currentPlayer, winner, isDraw, resetGame } = useTicTacToe()
+  const { players, resetPlayers } = usePlayerStore()
 
-  const onRestartRound = () => {
+  const onRestGame = () => {
     // TODO: IMPLEMENTAR RESTART ROUND
-    console.log('restart round')
+    resetGame()
   }
 
   const onResetPlayers = () => {
     // TODO: IMPLEMENTAR RESET PLAYERS
-    console.log('reset players')
+    resetPlayers()
+    resetGame()
+    redirect('/')
   }
 
   return (
@@ -22,25 +27,25 @@ export const GameInfoPanel = () => {
       <h2 className="text-xl font-bold mb-2">{GAME_INFO_PANEL_TEXTS.title}</h2>
       <div className="text-lg">
         {gameState === GAME_STATE.PLAYING && (
-          <p>{`${GAME_INFO_PANEL_TEXTS.turn} ${players[currentPlayer as keyof typeof players]}`}</p>
+          <p>{`${GAME_INFO_PANEL_TEXTS.turn} ${players[currentPlayer]}`}</p>
         )}
         {gameState === GAME_STATE.WON && winner && (
-          <p>{`${players[winner as keyof typeof players]} ${GAME_INFO_PANEL_TEXTS.winner}`}</p>
+          <p>{`${players[winner]} ${GAME_INFO_PANEL_TEXTS.winner}`}</p>
         )}
         {isDraw && <p>{GAME_INFO_PANEL_TEXTS.draw}</p>}
       </div>
-      <div>{GameInfoPanelController({ onRestartRound, onResetPlayers })}</div>
+      <div>{GameInfoPanelController({ onRestGame, onResetPlayers })}</div>
     </div>
   )
 }
 
 type GameInfoPanelControllerProps = {
-  onRestartRound: () => void
+  onRestGame: () => void
   onResetPlayers: () => void
 }
 
 const GameInfoPanelController = ({
-  onRestartRound,
+  onRestGame,
   onResetPlayers,
 }: GameInfoPanelControllerProps) => {
   const { gameState, isDraw } = useTicTacToe()
@@ -49,7 +54,7 @@ const GameInfoPanelController = ({
     return (
       <>
         <button
-          onClick={onRestartRound}
+          onClick={onRestGame}
           className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
         >
           {GAME_INFO_PANEL_TEXTS.restartRound}

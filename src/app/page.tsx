@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation'
+import { StartScreen } from '@/modules/games/tictactoe/components/StartScreen'
 
 export default function Home() {
-  redirect('/games')
+  return <StartScreen />
 }

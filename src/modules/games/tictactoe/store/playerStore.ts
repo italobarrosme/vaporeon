@@ -3,17 +3,17 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 
 type PlayerState = {
   players: {
-    player1: string
-    player2: string
+    x: string
+    o: string
   }
-  setPlayer: (player: 'player1' | 'player2', name: string) => void
-  reset: () => void
+  setPlayer: (player: 'x' | 'o', name: string) => void
+  resetPlayers: () => void
 }
 
 // 1. Estado inicial centralizado
 const initialPlayers: PlayerState['players'] = {
-  player1: '',
-  player2: '',
+  x: '',
+  o: '',
 }
 
 // 2. Usando StateCreator para tipar a criação do store
@@ -23,7 +23,7 @@ const playerStoreCreator = (set: any): PlayerState => ({
     set((state: PlayerState) => ({
       players: { ...state.players, [player]: name.trim() },
     })),
-  reset: () => set(() => ({ players: initialPlayers })),
+  resetPlayers: () => set(() => ({ players: initialPlayers })),
 })
 
 // 3. Criando o store no localStorage
