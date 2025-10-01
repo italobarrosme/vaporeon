@@ -7,7 +7,7 @@ export function generateUniqueId(prefix?: string): string {
   // Combina timestamp, random e performance.now() para máxima unicidade
   const timestamp = Date.now()
   const random = Math.random().toString(36).substring(2, 15)
-  const performanceNow = performance.now().toString().replace('.', '')
+  const performanceNow = typeof window !== 'undefined' ? performance.now().toString().replace('.', '') : '0'
 
   const uniquePart = `${timestamp}-${random}-${performanceNow}`
 
