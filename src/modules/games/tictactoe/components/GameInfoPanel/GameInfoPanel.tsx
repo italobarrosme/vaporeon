@@ -1,52 +1,20 @@
-import { memo } from 'react'
-import { useTicTacToeStore } from '@/stores/ticTacToeStore'
 import { GAME_INFO_PANEL_TEXTS } from './constants'
 import { GAME_STATE } from '../../constants/game'
+import { useTicTacToe } from '../../hook'
+import { usePlayerStore } from '../../store'
 
-type GameInfoPanelProps = {
-  onRestartRound: () => void
-  onResetPlayers: () => void
-  players: { x: string; o: string }
-}
+export const GameInfoPanel = () => {
+  const { gameState, currentPlayer, winner, isDraw } = useTicTacToe()
+  const { players } = usePlayerStore()
 
-const GameInfoPanelComponent = ({
-  onRestartRound,
-  onResetPlayers,
-  players,
-}: GameInfoPanelProps) => {
-  const gameState = useTicTacToeStore((state) => state.gameState)
-  const currentPlayer = useTicTacToeStore((state) => state.currentPlayer)
-  const winner = useTicTacToeStore((state) => state.winner)
-  const isDraw = gameState === GAME_STATE.DRAW
+  const onRestartRound = () => {
+    // TODO: IMPLEMENTAR RESTART ROUND
+    console.log('restart round')
+  }
 
-  const renderActionButtons = () => {
-    if (gameState === GAME_STATE.WON || isDraw) {
-      return (
-        <>
-          <button
-            onClick={onRestartRound}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            {GAME_INFO_PANEL_TEXTS.restartRound}
-          </button>
-          <button
-            onClick={onResetPlayers}
-            className="mt-4 ml-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-          >
-            {GAME_INFO_PANEL_TEXTS.restartPlayers}
-          </button>
-        </>
-      )
-    }
-
-    return (
-      <button
-        onClick={onResetPlayers}
-        className="mt-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-      >
-        {GAME_INFO_PANEL_TEXTS.restartPlayers}
-      </button>
-    )
+  const onResetPlayers = () => {
+    // TODO: IMPLEMENTAR RESET PLAYERS
+    console.log('reset players')
   }
 
   return (
@@ -54,16 +22,54 @@ const GameInfoPanelComponent = ({
       <h2 className="text-xl font-bold mb-2">{GAME_INFO_PANEL_TEXTS.title}</h2>
       <div className="text-lg">
         {gameState === GAME_STATE.PLAYING && (
-          <p>{`${GAME_INFO_PANEL_TEXTS.turn} ${players[currentPlayer]}`}</p>
+          <p>{`${GAME_INFO_PANEL_TEXTS.turn} ${players[currentPlayer as keyof typeof players]}`}</p>
         )}
         {gameState === GAME_STATE.WON && winner && (
-          <p>{`${players[winner]} ${GAME_INFO_PANEL_TEXTS.winner}`}</p>
+          <p>{`${players[winner as keyof typeof players]} ${GAME_INFO_PANEL_TEXTS.winner}`}</p>
         )}
         {isDraw && <p>{GAME_INFO_PANEL_TEXTS.draw}</p>}
       </div>
-      <div>{renderActionButtons()}</div>
+      <div>{GameInfoPanelController({ onRestartRound, onResetPlayers })}</div>
     </div>
   )
 }
 
-export const GameInfoPanel = memo(GameInfoPanelComponent)
+type GameInfoPanelControllerProps = {
+  onRestartRound: () => void
+  onResetPlayers: () => void
+}
+
+const GameInfoPanelController = ({
+  onRestartRound,
+  onResetPlayers,
+}: GameInfoPanelControllerProps) => {
+  const { gameState, isDraw } = useTicTacToe()
+
+  if (gameState === GAME_STATE.WON || isDraw) {
+    return (
+      <>
+        <button
+          onClick={onRestartRound}
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          {GAME_INFO_PANEL_TEXTS.restartRound}
+        </button>
+        <button
+          onClick={onResetPlayers}
+          className="mt-4 ml-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+        >
+          {GAME_INFO_PANEL_TEXTS.restartPlayers}
+        </button>
+      </>
+    )
+  }
+
+  return (
+    <button
+      onClick={onResetPlayers}
+      className="mt-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+    >
+      {GAME_INFO_PANEL_TEXTS.restartPlayers}
+    </button>
+  )
+}

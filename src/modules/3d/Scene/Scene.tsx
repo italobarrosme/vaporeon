@@ -5,20 +5,11 @@ import { RapierDebug } from '../utils/RapierDebug'
 import { Block } from '@/modules/games/tictactoe/3d/Block'
 import { Mesh } from 'three'
 import { Floor } from '../pieces/Floor'
-import { useTicTacToe } from '@/modules/games/tictactoe/hook/useTicTacToe'
-import { blocksPositions } from '@/stores/ticTacToeStore'
+import { useTicTacToe } from '@/modules/games/tictactoe/hook'
 
-type SceneProps = {
-  handleBlockClick: ReturnType<typeof useTicTacToe>['handleBlockClick']
-  board: ReturnType<typeof useTicTacToe>['board']
-  blocksPositions: typeof blocksPositions
-}
+export const Scene = () => {
+  const { blocksPositions, board, handleBlockClick } = useTicTacToe()
 
-export const Scene = ({
-  handleBlockClick,
-  board,
-  blocksPositions,
-}: SceneProps) => {
   const floorRef = useRef<Mesh>(null)
   const blocksRefs = useRef<Array<React.RefObject<Mesh | null>>>(
     // Inicializar array de refs

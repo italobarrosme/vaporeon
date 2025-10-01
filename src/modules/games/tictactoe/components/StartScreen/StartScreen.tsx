@@ -1,33 +1,25 @@
 'use client'
 
-import { useCallback, useEffect } from 'react'
-import { usePlayerStore } from '@/stores/playerStore'
+import { useEffect } from 'react'
+import { usePlayerStore } from '@/modules/games/tictactoe/store/playerStore'
 import { START_SCREEN_TEXTS } from './constants'
-import { useGameStore } from '@/stores/gameStore'
 
 export const StartScreen = () => {
   const { players, setPlayer, reset } = usePlayerStore()
-  const startGame = useGameStore((state) => state.startGame)
 
   useEffect(() => {
     reset()
   }, [reset])
 
-  const handleSubmit = useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault()
-      if (!players.player1 || !players.player2) return
-      startGame()
-    },
-    [players, startGame]
-  )
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (!players.player1 || !players.player2) return
+    // TODO: IMPLEMENTAR STARGAME
+  }
 
-  const handleChange = useCallback(
-    (player: 'player1' | 'player2', value: string) => {
-      setPlayer(player, value)
-    },
-    [setPlayer]
-  )
+  const handleChange = (player: 'player1' | 'player2', value: string) => {
+    setPlayer(player, value)
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-game-bg text-white font-press-start">

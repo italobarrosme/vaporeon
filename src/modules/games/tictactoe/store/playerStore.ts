@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 
-interface PlayerState {
+type PlayerState = {
   players: {
     player1: string
     player2: string
@@ -26,6 +26,7 @@ const playerStoreCreator = (set: any): PlayerState => ({
   reset: () => set(() => ({ players: initialPlayers })),
 })
 
+// 3. Criando o store no localStorage
 export const usePlayerStore = create<PlayerState>()(
   persist(playerStoreCreator, {
     name: 'player-storage',
