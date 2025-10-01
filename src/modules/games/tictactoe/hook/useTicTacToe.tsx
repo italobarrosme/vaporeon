@@ -81,7 +81,9 @@ export const useTicTacToe = () => {
   // 3. A lógica interna foi refatorada para usar o objeto de estado único
 
   const checkWinner = useCallback(
-    (newBoard: Array<CellState>): { winner: Player | null; winningLine: number[] | null } => {
+    (
+      newBoard: Array<CellState>
+    ): { winner: Player | null; winningLine: number[] | null } => {
       for (const combination of winningCombinations) {
         const [a, b, c] = combination
         if (
@@ -124,7 +126,11 @@ export const useTicTacToe = () => {
       }
 
       if (checkDraw(newBoard)) {
-        setState((prevState) => ({ ...prevState, board: newBoard, gameState: 'draw' }))
+        setState((prevState) => ({
+          ...prevState,
+          board: newBoard,
+          gameState: 'draw',
+        }))
         return
       }
 
