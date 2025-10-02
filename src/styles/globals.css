@@ -55,6 +55,8 @@
   --color-complementary-highlight: hsl(39 100% 50%);
 
   /* 🎮 Game Info Theme Colors */
+  --color-game-bg: #0a003d;
+  --color-game-input-bg: #1a006d;
   --color-game-info-bg-primary: rgba(26, 26, 46, 0.95);
   --color-game-info-bg-secondary: #16213e;
   --color-game-info-bg-accent: rgba(72, 219, 251, 0.1);
@@ -255,5 +257,11 @@
       transform: translateY(0);
       opacity: 1;
     }
+  }
+}
+
+@layer utilities {
+  .text-shadow-game {
+    filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 1));
   }
 }

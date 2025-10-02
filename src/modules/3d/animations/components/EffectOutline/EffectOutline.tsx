@@ -44,7 +44,7 @@ export function EffectOutline({
     } else if (disablePointerAnimation) {
       wasAnimating.current = true
     }
-  }, [disablePointerAnimation, currentBasePosition, persistedLookAt])
+  }, [disablePointerAnimation, currentBasePosition])
 
   useFrame((state, delta) => {
     // Só anima com o ponteiro se não estiver desabilitado

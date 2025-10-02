@@ -1,5 +1,3 @@
-'use client'
-
 import { Physics } from '@react-three/rapier'
 import { createRef, Fragment, useRef } from 'react'
 
@@ -7,19 +5,18 @@ import { RapierDebug } from '../utils/RapierDebug'
 import { Block } from '@/modules/games/tictactoe/3d/Block'
 import { Mesh } from 'three'
 import { Floor } from '../pieces/Floor'
-import { useTicTacToe } from '@/modules/games/tictactoe/hook/useTicTacToe'
-// import { useRainObjects } from '../animations/hooks/useRainObjects'
+import { useTicTacToe } from '@/modules/games/tictactoe/hook'
 
-// import { objectsDataMock } from '@/modules/games/mockItems'
+// 1. Definir as props da cena com base no que é retornado pelo hook useTicTacToe
+type SceneProps = ReturnType<typeof useTicTacToe>
 
-// 3x3 tic toc toe
-
-export const Scene = () => {
-  const { blocksPositions, board, handleBlockClick } = useTicTacToe()
-
+export const Scene = ({
+  board,
+  blocksPositions,
+  handleBlockClick,
+}: SceneProps) => {
   const floorRef = useRef<Mesh>(null)
   const blocksRefs = useRef<Array<React.RefObject<Mesh | null>>>(
-    // Inicializar array de refs
     Array.from({ length: blocksPositions.length }, () => createRef<Mesh>())
   )
 
