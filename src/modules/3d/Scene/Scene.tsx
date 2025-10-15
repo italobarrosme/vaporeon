@@ -5,10 +5,16 @@ import { RapierDebug } from '../utils/RapierDebug'
 import { Block } from '@/modules/games/tictactoe/3d/Block'
 import { Mesh } from 'three'
 import { Floor } from '../pieces/Floor'
-import { useTicTacToe } from '@/modules/games/tictactoe/hook'
 
 // 1. Definir as props da cena com base no que é retornado pelo hook useTicTacToe
-type SceneProps = ReturnType<typeof useTicTacToe>
+type SceneProps = {
+  blocksPositions: readonly {
+    position: readonly [number, number, number]
+    color: string
+  }[]
+  board: Array<'normal' | 'x' | 'o'>
+  handleBlockClick: (index: number) => void
+}
 
 export const Scene = ({
   board,

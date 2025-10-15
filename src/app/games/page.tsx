@@ -25,7 +25,11 @@ export default function Game() {
         resetGame={game.resetGame}
       />
       <RenderCanvas>
-        <Scene {...game} />
+        <Scene
+          board={game.board}
+          blocksPositions={game.blocksPositions}
+          handleBlockClick={game.handleBlockClick}
+        />
       </RenderCanvas>
     </div>
   )
