@@ -1,14 +1,5 @@
-'use client'
-
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { StartScreen } from '@/modules/games/tictactoe/components/StartScreen'
 
 export default function Home() {
-  const router = useRouter()
-
-  useEffect(() => {
-    router.push('/games')
-  }, [])
-
-  return null
+  return <StartScreen />
 }

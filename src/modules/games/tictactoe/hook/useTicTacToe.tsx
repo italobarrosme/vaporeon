@@ -1,8 +1,4 @@
-import { useState, useCallback } from 'react'
-
-type Player = 'x' | 'O'
-type CellState = 'normal' | Player
-type GameState = 'playing' | 'won' | 'draw'
+import { useGameStore } from '../store/gameStore'
 
 const blocksPositions = [
   { position: [-5.5, 5, -5.5], color: '#f9f' },
@@ -16,108 +12,14 @@ const blocksPositions = [
   { position: [6.5, 5, 6.5], color: '#f25' },
 ] as const
 
-// Combinações vencedoras (linhas, colunas, diagonais)
-const winningCombinations = [
-  [0, 1, 2], // linha superior
-  [3, 4, 5], // linha meio
-  [6, 7, 8], // linha inferior
-  [0, 3, 6], // coluna esquerda
-  [1, 4, 7], // coluna meio
-  [2, 5, 8], // coluna direita
-  [0, 4, 8], // diagonal principal
-  [2, 4, 6], // diagonal secundária
-]
-
 export const useTicTacToe = () => {
-  const [board, setBoard] = useState<Array<CellState>>(Array(9).fill('normal'))
-  const [currentPlayer, setCurrentPlayer] = useState<Player>('x')
-  const [gameState, setGameState] = useState<GameState>('playing')
-  const [winner, setWinner] = useState<Player | null>(null)
-  const [winningLine, setWinningLine] = useState<number[] | null>(null)
-
-  // Verifica se há vencedor
-  const checkWinner = useCallback(
-    (newBoard: Array<CellState>): Player | null => {
-      for (const combination of winningCombinations) {
-        const [a, b, c] = combination
-        if (
-          newBoard[a] !== 'normal' &&
-          newBoard[a] === newBoard[b] &&
-          newBoard[a] === newBoard[c]
-        ) {
-          setWinningLine(combination)
-          return newBoard[a] as Player
-        }
-      }
-      return null
-    },
-    []
-  )
-
-  // Verifica se o tabuleiro está cheio (empate)
-  const checkDraw = useCallback((newBoard: Array<CellState>): boolean => {
-    return newBoard.every((cell) => cell !== 'normal')
-  }, [])
-
-  // Manipula o clique no bloco
-  const handleBlockClick = useCallback(
-    (index: number) => {
-      // Não permite jogada se o jogo terminou ou célula já ocupada
-      if (gameState !== 'playing' || board[index] !== 'normal') {
-        return
-      }
-
-      const newBoard = [...board]
-      newBoard[index] = currentPlayer
-
-      // Verifica vencedor
-      const gameWinner = checkWinner(newBoard)
-      if (gameWinner) {
-        setWinner(gameWinner)
-        setGameState('won')
-        setBoard(newBoard)
-        return
-      }
-
-      // Verifica empate
-      if (checkDraw(newBoard)) {
-        setGameState('draw')
-        setBoard(newBoard)
-        return
-      }
-
-      // Continua o jogo - alterna jogador
-      setBoard(newBoard)
-      setCurrentPlayer(currentPlayer === 'x' ? 'O' : 'x')
-    },
-    [board, currentPlayer, gameState, checkWinner, checkDraw]
-  )
-
-  // Reinicia o jogo
-  const resetGame = useCallback(() => {
-    setBoard(Array(9).fill('normal'))
-    setCurrentPlayer('x')
-    setGameState('playing')
-    setWinner(null)
-    setWinningLine(null)
-  }, [])
+  const state = useGameStore()
 
   return {
-    // Estado do jogo
-    board,
-    currentPlayer,
-    gameState,
-    winner,
-    winningLine,
+    ...state,
     blocksPositions,
-
-    // Ações
-    handleBlockClick,
-    resetGame,
-
-    // Utilitários
-    isGameOver: gameState !== 'playing',
-    isDraw: gameState === 'draw',
-    hasWinner: gameState === 'won',
+    isGameOver: state.gameState !== 'playing',
+    isDraw: state.gameState === 'draw',
+    hasWinner: state.gameState === 'won',
   }
 }

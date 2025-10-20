@@ -1,5 +1,5 @@
 import { RigidBody, RigidBodyProps } from '@react-three/rapier'
-import { forwardRef, useState } from 'react'
+import { forwardRef, useMemo, useState } from 'react'
 import { Mesh } from 'three'
 import { X } from '../X/X'
 
@@ -11,14 +11,14 @@ type BlockProps = {
   scale?: [number, number, number]
   rigidBody?: boolean
   rigidBodyOptions?: RigidBodyProps
-  blockType?: 'normal' | 'x' | 'O'
+  blockType?: 'normal' | 'x' | 'o'
   onClick?: () => void
 }
 
 const rotationTypeBlock = {
   normal: [0, 0, 0],
   x: [Math.PI / 2, 0, 0],
-  O: [Math.PI / 2, 0, 0],
+  o: [Math.PI / 2, 0, 0],
 } as const
 
 export const Block = forwardRef<Mesh, BlockProps>(
@@ -47,21 +47,21 @@ export const Block = forwardRef<Mesh, BlockProps>(
       document.body.style.cursor = 'default'
     }
 
-    const switchPosition = (): [number, number, number] => {
+    const memoizedPosition = useMemo((): [number, number, number] => {
       switch (blockType) {
         case 'normal':
           return position
         case 'x':
           return [position[0], position[1] - 1, position[2]]
-        case 'O':
+        case 'o':
           return [position[0], position[1] - 1, position[2]]
       }
-    }
+    }, [blockType, position])
 
     if (rigidBody) {
       return (
         <RigidBody
-          position={switchPosition()}
+          position={memoizedPosition}
           scale={scale}
           {...rigidBodyOptions}
         >
@@ -76,7 +76,7 @@ export const Block = forwardRef<Mesh, BlockProps>(
           >
             {blockType === 'normal' && <boxGeometry args={size} />}
             {blockType === 'x' && <X args={[4.5, 0.5, 0.5]} color={color} />}
-            {blockType === 'O' && (
+            {blockType === 'o' && (
               <>
                 <torusGeometry args={[1.5, 0.5, 16, 32]} />
                 <meshPhysicalMaterial color={color} />

@@ -1,5 +1,6 @@
 'use client'
 
+import * as React from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 // import { EffectOutline } from '../animations/components'
@@ -14,6 +15,23 @@ export const RenderCanvas = ({ children }: RenderCanvasProps) => {
   const initialPosition: [number, number, number] = [-12.52, 28.37, 21.75]
   const initialLookAt: [number, number, number] = [-0.015, -0.023, 0.056]
   const positionLight: [number, number, number] = [-5, 9, 10]
+
+  // Referência para o controle da câmera
+  const orbitControlsRef = React.useRef<any>(null)
+
+  // Efeito para lidar com o evento de reset da câmera
+  React.useEffect(() => {
+    const handleResetCamera = () => {
+      if (orbitControlsRef.current) {
+        orbitControlsRef.current.reset()
+      }
+    }
+
+    window.addEventListener('reset-camera-position', handleResetCamera)
+    return () => {
+      window.removeEventListener('reset-camera-position', handleResetCamera)
+    }
+  }, [])
   return (
     <Canvas
       shadows
@@ -47,6 +65,7 @@ export const RenderCanvas = ({ children }: RenderCanvasProps) => {
       </EffectOutline> */}
       {children}
       <OrbitControls
+        ref={orbitControlsRef}
         position0={initialPosition}
         target0={initialLookAt}
         enableDamping={false}
