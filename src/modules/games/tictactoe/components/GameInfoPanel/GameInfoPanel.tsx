@@ -13,12 +13,7 @@ type GameStatusProps = {
   isDraw: boolean
 }
 
-const GameStatus = ({
-  gameState,
-  currentPlayer,
-  winner,
-  isDraw,
-}: GameStatusProps) => {
+const GameStatus = ({ gameState, currentPlayer, winner }: GameStatusProps) => {
   const { players } = usePlayerStore()
 
   return (
@@ -31,7 +26,7 @@ const GameStatus = ({
         {gameState === GAME_STATE.WON && winner && (
           <p>{`${players[winner]} ${GAME_INFO_PANEL_TEXTS.winner}`}</p>
         )}
-        {isDraw && <p>{GAME_INFO_PANEL_TEXTS.draw}</p>}
+        {gameState === GAME_STATE.DRAW && <p>{GAME_INFO_PANEL_TEXTS.draw}</p>}
       </div>
     </>
   )

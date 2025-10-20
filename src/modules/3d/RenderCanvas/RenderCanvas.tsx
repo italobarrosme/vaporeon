@@ -3,9 +3,6 @@
 import * as React from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
-// import { EffectOutline } from '../animations/components'
-// import * as THREE from 'three'
-// import { CameraLogger } from '../utils/CameraLogger'
 
 type RenderCanvasProps = {
   children: React.ReactNode
@@ -55,14 +52,6 @@ export const RenderCanvas = ({ children }: RenderCanvasProps) => {
           shadow-mapSize={[2048, 2048]}
         />
       </mesh>
-      {/* <EffectOutline
-        initialPosition={initialPosition}
-        disablePointerAnimation={false}
-        currentBasePosition={new THREE.Vector3(...initialPosition)}
-        persistedLookAt={new THREE.Vector3(...initialLookAt)}
-      >
-        {children}
-      </EffectOutline> */}
       {children}
       <OrbitControls
         ref={orbitControlsRef}
@@ -74,7 +63,6 @@ export const RenderCanvas = ({ children }: RenderCanvasProps) => {
         // enableRotate={false}
         // enablePan={false}
       />
-      {/* <CameraLogger /> */}
     </Canvas>
   )
 }

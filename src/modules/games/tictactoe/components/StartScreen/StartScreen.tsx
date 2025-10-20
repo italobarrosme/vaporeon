@@ -10,10 +10,6 @@ export const StartScreen = () => {
   const { players, setPlayer } = usePlayerStore()
   const { resetGame } = useTicTacToe()
 
-  // useEffect(() => {
-  //   resetPlayers()
-  // }, [resetPlayers])
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (!players.x || !players.o) return
@@ -22,7 +18,6 @@ export const StartScreen = () => {
   }
 
   const handleChange = (player: 'x' | 'o', value: string) => {
-    console.log('handleChange', player, value)
     setPlayer(player, value)
   }
 

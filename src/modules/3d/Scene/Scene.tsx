@@ -1,7 +1,5 @@
 import { Physics } from '@react-three/rapier'
 import { createRef, Fragment, useRef } from 'react'
-
-import { RapierDebug } from '../utils/RapierDebug'
 import { Block } from '@/modules/games/tictactoe/3d/Block'
 import { Mesh } from 'three'
 import { Floor } from '../pieces/Floor'
@@ -28,7 +26,6 @@ export const Scene = ({
 
   return (
     <Physics>
-      <RapierDebug />
       {blocksPositions.map((block, index) => (
         <Fragment key={index}>
           <Block
