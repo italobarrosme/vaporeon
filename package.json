@@ -1,7 +1,7 @@
 {
-  "name": "flareon",
+  "name": "vaporeon-tic-tac-toe",
   "version": "1.0.0",
-  "description": "flareon",
+  "description": "Vaporeon Tic Tac Toe Game",
   "private": true,
   "type": "module",
   "scripts": {
@@ -13,16 +13,10 @@
     "test:deploy": "vitest --run",
     "test:snapshot": "vitest -u",
     "docker-up": "docker-compose up -d",
-    "docker-down": "docker-compose down"
-  },
-  "prisma": {
-    "seed": "node --loader ts-node/esm prisma/lib/seed.ts"
+    "docker-down": "docker-compose down",
+    "init-lefthook": "lefthook install"
   },
   "dependencies": {
-    "@auth0/nextjs-auth0": "^4.6.1",
-    "@faker-js/faker": "^9.8.0",
-    "@hookform/resolvers": "^5.1.1",
-    "@prisma/client": "^6.9.0",
     "@react-three/drei": "^10.7.6",
     "@react-three/fiber": "^9.3.0",
     "@react-three/postprocessing": "^3.0.4",
@@ -81,9 +75,7 @@
     "lint-staged": "^16.1.0",
     "postcss": "^8.5.5",
     "prettier": "^3.5.3",
-    "prisma": "^6.9.0",
     "tailwind-merge": "^3.3.1",
-    "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.3"
