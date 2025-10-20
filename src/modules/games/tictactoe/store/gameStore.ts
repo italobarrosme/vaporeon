@@ -64,44 +64,6 @@ const checkDraw = (newBoard: Array<CellState>): boolean => {
   return newBoard.every((cell) => cell !== 'normal')
 }
 
-// Função para validar e corrigir estado inconsistente
-const validateAndFixState = (state: GameState): GameState => {
-  const { winner: actualWinner, winningLine: actualWinningLine } = checkWinner(state.board)
-  const actualDraw = checkDraw(state.board)
-  
-  // Se há vencedor real mas estado diz empate ou playing
-  if (actualWinner && (state.gameState === 'draw' || state.gameState === 'playing')) {
-    return {
-      ...state,
-      gameState: 'won',
-      winner: actualWinner,
-      winningLine: actualWinningLine,
-    }
-  }
-  
-  // Se é empate real mas estado diz won ou playing
-  if (actualDraw && (state.gameState === 'won' || state.gameState === 'playing')) {
-    return {
-      ...state,
-      gameState: 'draw',
-      winner: null,
-      winningLine: null,
-    }
-  }
-  
-  // Se não há vencedor nem empate mas estado não é playing
-  if (!actualWinner && !actualDraw && state.gameState !== 'playing') {
-    return {
-      ...state,
-      gameState: 'playing',
-      winner: null,
-      winningLine: null,
-    }
-  }
-  
-  return state
-}
-
 export const useGameStore = create<GameState & GameActions>()(
   persist(
     (set, get) => ({
